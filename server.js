@@ -41,6 +41,10 @@ app.use(express.static(__dirname + '/public'));
 var apiRoutes = require('./app/routes/api')(app, express);
 app.use('/api', apiRoutes);
 
+// EVENTBRITE  ROUTES (Not needed I think) ------------------------
+// app.get('/api/eventbrite', apiController.getEventBright);
+// app.post('/api/eventbrite', apiController.postEventBright);
+
 // MAIN CATCHALL ROUTE --------------- 
 // SEND USERS TO FRONTEND ------------
 // has to be registered after API ROUTES

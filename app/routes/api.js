@@ -1,6 +1,7 @@
 var User       = require('../models/user');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
+var request;
 
 // super secret for creating tokens
 var superSecret = config.secret;
@@ -183,10 +184,38 @@ module.exports = function(app, express) {
 			});
 		});
 
-// api endpoint to get user information
-apiRouter.get('/me', function(req, res) {
-	res.send(req.decoded);
-});
+    // api endpoint to get user information
+    apiRouter.get('/me', function(req, res) {
+	    res.send(req.decoded);
+    });
+
+    // eventbrite endpoint
+    apiRouter.get('/eventbrite', function(req, res, next){
+        request = require('request');
+
+        var query = {
+            'location.address': 'Boston',
+            'sort_by':'best',
+            'token': config.eventbrite_key
+        };
+
+        request.get({ url: 'https://www.eventbriteapi.com/v3/events/search', qs: query }, function(err, request, body) {
+            
+            if (request.statusCode === 403) {
+                return next(new Error('BAD API CALL'));
+            }
+
+            var ret = JSON.parse(body);
+
+            //res.send(body);
+
+            res.render('/eventbrite', {
+                my_title: 'Event Bright API',
+                events: ret.events
+            });
+
+        });
+    });
 
 	return apiRouter;
 };
