@@ -23,6 +23,14 @@ angular.module('app.routes', ['ngRoute'])
 			controllerAs: 'user'
 		})
 
+		// show events
+		.when('/users/events', {
+			templateUrl: 'app/views/pages/users/events.html',
+			controller: 'eventController',
+			controllerAs: 'user'
+		})
+
+
 		// form to create a new user
 		// same view as edit page
 		.when('/users/create', {

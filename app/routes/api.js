@@ -189,7 +189,7 @@ module.exports = function(app, express) {
 	    res.send(req.decoded);
     });
 
-    // eventbrite GET endpoint to get events - ** FOR TESTING PURPOSES ONLY **
+    // eventbrite GET endpoint to get events - ** FOR TESTING PURPOSES ONLY ** - ** NOT INTENDED FOR DEPLOYMENT USE **
     apiRouter.get('/eventbrite', function(req, res, next){
         request = require('request');
 
@@ -207,7 +207,7 @@ module.exports = function(app, express) {
 
             var ret = JSON.parse(body);
 
-            res.send(body);
+            res.send(ret);
 
             //res.render('/eventbrite', {
             //    my_title: 'Event Bright API',
@@ -249,7 +249,7 @@ module.exports = function(app, express) {
 
     		var ret = JSON.parse(body);
 
-    		res.send(body);
+    		res.send(ret);
     		
     		//req.flash('success', {msg: 'I have recieved the query!'});
     		//res.render('api/eventb', {
