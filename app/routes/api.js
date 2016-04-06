@@ -189,7 +189,7 @@ module.exports = function(app, express) {
 	    res.send(req.decoded);
     });
 
-    // eventbrite endpoint
+    // eventbrite GET endpoint to get events - ** FOR TESTING PURPOSES ONLY **
     apiRouter.get('/eventbrite', function(req, res, next){
         request = require('request');
 
@@ -207,14 +207,56 @@ module.exports = function(app, express) {
 
             var ret = JSON.parse(body);
 
-            //res.send(body);
+            res.send(body);
 
-            res.render('/eventbrite', {
-                my_title: 'Event Bright API',
-                events: ret.events
-            });
+            //res.render('/eventbrite', {
+            //    my_title: 'Event Bright API',
+            //    events: ret.events
+            //});
 
         });
+    });
+
+    // eventbrite POST endpoint to get events
+    apiRouter.post('/eventbrite', function(req, res) {
+    	// req.assert('name', 'Name cannot be blank').notEmpty();
+
+    	// var errors = req.validationErrors();
+
+    	// if (errors) {
+    	//	req.flash('errors', errors);
+    	//	res.render('account/signup', {
+    	//		title: 'Create Account'
+    	//	});
+    	//	return res;
+    	//}
+
+    	request = require('request');
+
+    	var location = req.body.location;
+
+    	var query = {
+    		'location.address': location,
+    		'sort_by':'best',
+    		'token': config.eventbrite_key
+    	};
+
+    	request.get({ url: 'https://www.eventbriteapi.com/v3/events/search', qs: query }, function(err, request, body) {
+    		
+    		if (request.statusCode === 403) {
+    			return next(new Error('BAD API CALL'));
+    		}
+
+    		var ret = JSON.parse(body);
+
+    		res.send(body);
+    		
+    		//req.flash('success', {msg: 'I have recieved the query!'});
+    		//res.render('api/eventb', {
+    		//	my_title: 'Event Bright API',
+    		//	events: ret.events
+    		//});
+    	})
     });
 
 	return apiRouter;
