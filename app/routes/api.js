@@ -1,7 +1,9 @@
 var User       = require('../models/user');
+var Event      = require('../models/event');
 var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
-var request;
+var mongodb    = require('mongodb').MongoClient;
+var request    = require('request');
 
 // super secret for creating tokens
 var superSecret = config.secret;
@@ -190,6 +192,7 @@ module.exports = function(app, express) {
     });
 
     // eventbrite GET endpoint to get events - ** FOR TESTING PURPOSES ONLY ** - ** NOT INTENDED FOR DEPLOYMENT USE **
+    /*
     apiRouter.get('/eventbrite', function(req, res, next){
         request = require('request');
 
@@ -205,9 +208,9 @@ module.exports = function(app, express) {
                 return next(new Error('BAD API CALL'));
             }
 
-            var ret = JSON.parse(body);
+            var obj = JSON.parse(body);
 
-            res.send(ret);
+            res.send(obj);
 
             //res.render('/eventbrite', {
             //    my_title: 'Event Bright API',
@@ -216,6 +219,7 @@ module.exports = function(app, express) {
 
         });
     });
+    */
 
     // eventbrite POST endpoint to get events
     apiRouter.post('/eventbrite', function(req, res) {
@@ -231,14 +235,13 @@ module.exports = function(app, express) {
     	//	return res;
     	//}
 
-    	request = require('request');
-
     	var location = req.body.location;
 
     	var query = {
     		'location.address': location,
     		'sort_by':'best',
-    		'token': config.eventbrite_key
+    		'token': config.eventbrite_key,
+    		'popular': true
     	};
 
     	request.get({ url: 'https://www.eventbriteapi.com/v3/events/search', qs: query }, function(err, request, body) {
@@ -247,17 +250,72 @@ module.exports = function(app, express) {
     			return next(new Error('BAD API CALL'));
     		}
 
-    		var ret = JSON.parse(body);
+    		var obj = JSON.parse(body);
 
-    		res.send(ret);
+    		// Top 10 events only for now;
+
+    		for (i = 0; i < 10; i++) { 
+
+    			var name_e = obj.events[i].name.text;
+    			var location_e = req.body.location;
+    			var id_e = obj.events[i].id;
+    			var start_e = obj.events[i].start.local;
+
+    			var event = new Event();		// create a new instance of the Event model
+    			event.name = name_e;  
+    			event.location = location_e;  
+    			event.id = id_e; 
+    			event.start = start_e;
+
+    			event.save(function(err) {
+    			
+    				if (err) {
+					// duplicate entry
+					if (err.code == 11000) 
+						return res.json({ success: false, message: 'An event with that id already exists. '});
+					else 
+						return res.send(err);
+				}
+
+					
+			});	
+    		
+    		
+
+    	};
+    		
+    		
+    		
     		
     		//req.flash('success', {msg: 'I have recieved the query!'});
     		//res.render('api/eventb', {
     		//	my_title: 'Event Bright API',
     		//	events: ret.events
     		//});
+
+    		// return a message
+			res.json({ message: 'Events saved!' });
     	})
     });
+
+    	apiRouter.route('/events')
+
+		// create a user (accessed at POST http://localhost:8080/events)
+		.post(function(req, res) {
+			
+			
+
+		})
+
+		// get all the users (accessed at GET http://localhost:8080/api/users)
+		//.get(function(req, res) {
+		//	User.find(function(err, users) {
+		//		if (err) res.send(err);
+
+				// return the users
+		//		res.json(users);
+		//	});
+		//});
 
 	return apiRouter;
 };

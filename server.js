@@ -6,7 +6,7 @@ var express    = require('express');		// call express
 var app        = express(); 				// define our app using express
 var bodyParser = require('body-parser'); 	// get body-parser
 var morgan     = require('morgan'); 		// used to see requests
-var mongoose   = require('mongoose');
+var mongoose   = require('./app/mongoose');
 var config 	   = require('./config');
 var path 	   = require('path');
 
@@ -28,7 +28,6 @@ app.use(function(req, res, next) {
 app.use(morgan('dev'));
 
 // connect to the database (locally hosted for now - details in config.js file)
-mongoose.connect(config.database); 
 
 // set static files location
 // used for requests that our frontend will make

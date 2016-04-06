@@ -1,4 +1,4 @@
-var mongoose     = require('mongoose');
+var mongoose     = require('../mongoose');
 var Schema       = mongoose.Schema;
 var bcrypt 		 = require('bcrypt-nodejs');
 
@@ -33,4 +33,4 @@ UserSchema.methods.comparePassword = function(password) {
 	return bcrypt.compareSync(password, user.password);
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.main_conn.model('User', UserSchema);
