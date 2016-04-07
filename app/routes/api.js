@@ -34,7 +34,7 @@ module.exports = function(app, express) {
 	      // check if password matches
 	      var validPassword = user.comparePassword(req.body.password);
 	      if (!validPassword) {
-	        res.json({ 
+	        res.json({
 	        	success: false, 
 	        	message: 'Authentication failed. Wrong password.' 
 	    		});
