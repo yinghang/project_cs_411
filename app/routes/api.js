@@ -221,7 +221,84 @@ module.exports = function(app, express) {
     });
     */
 
+
+    //-------------------------------------------------------------------------------
+    // eventbrite POST endpoint to search events and get them if unavailable in mongo
+    // ------------------------------------------------------------------------------
+
+    apiRouter.post('/eventbritesearch', function(req,res){
+    	var location_temp = req.body.location;
+
+    	// determines if location is stored in Mongo already
+
+    	Event.findOne({location: location_temp}).select('name location id start').exec(function(err, event){
+    		if (err) throw err;
+
+    		// no events with that location was found
+    		if(!event){
+    			// push to eventbrite
+    			
+    			var query = {
+    				'location.address': location_temp,
+    				'sort_by':'best',
+    				'token': config.eventbrite_key,
+    				'popular': true
+    			};
+
+    			request.get({ url: 'https://www.eventbriteapi.com/v3/events/search', qs: query }, function(err, request, body) {
+    		
+    		if (request.statusCode === 403) {
+    			return next(new Error('BAD API CALL'));
+    		}
+
+    		var obj = JSON.parse(body);
+
+    		// Top 10 events only for now;
+
+    		for (i = 0; i < 10; i++) { 
+
+    			var name_e = obj.events[i].name.text;
+    			var location_e = req.body.location;
+    			var id_e = obj.events[i].id;
+    			var start_e = obj.events[i].start.local;
+
+    			var event = new Event();		// create a new instance of the Event model
+    			event.name = name_e;  
+    			event.location = location_e;  
+    			event.id = id_e; 
+    			event.start = start_e;
+
+    			event.save(function(err) {
+    			
+    				if (err) {
+					// duplicate entry
+					if (err.code == 11000) 
+						return res.json({ success: false, message: 'An event with that id already exists. '});
+					else 
+						return res.send(err);
+					}	
+				});	
+    		};
+    		// return a message
+			res.json({ message: 'Events saved!' });
+    	})
+
+    		} else if (event){
+
+    			Event.find({location: location_temp}).select('name location id start').exec(function(err, event){
+    			if (err) throw err;
+    			res.json(event);
+
+    			})
+    		}
+    	})
+
+    });
+
+/*
+    //-----------------------------------------------------------------------
     // eventbrite POST endpoint to get events
+    // ----------------------------------------------------------------------
     apiRouter.post('/eventbrite', function(req, res) {
     	// req.assert('name', 'Name cannot be blank').notEmpty();
 
@@ -275,37 +352,15 @@ module.exports = function(app, express) {
 						return res.json({ success: false, message: 'An event with that id already exists. '});
 					else 
 						return res.send(err);
-				}
-
-					
-			});	
-    		
-    		
-
-    	};
-    		
-    		
-    		
-    		
-    		//req.flash('success', {msg: 'I have recieved the query!'});
-    		//res.render('api/eventb', {
-    		//	my_title: 'Event Bright API',
-    		//	events: ret.events
-    		//});
-
+					}	
+				});	
+    		};
     		// return a message
 			res.json({ message: 'Events saved!' });
     	})
     });
+    */
 
-    	apiRouter.route('/events')
-
-		// create a user (accessed at POST http://localhost:8080/events)
-		.post(function(req, res) {
-			
-			
-
-		})
 
 		// get all the users (accessed at GET http://localhost:8080/api/users)
 		//.get(function(req, res) {

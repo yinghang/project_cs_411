@@ -27,7 +27,14 @@ angular.module('app.routes', ['ngRoute'])
 		.when('/users/events', {
 			templateUrl: 'app/views/pages/users/events.html',
 			controller: 'eventController',
-			controllerAs: 'user'
+			controllerAs: 'event'
+		})
+
+		// search events
+		.when('/users/eventsearch', {
+			templateUrl: 'app/views/pages/users/search.html',
+			controller: 'eventSearchController',
+			controllerAs: 'event'
 		})
 
 

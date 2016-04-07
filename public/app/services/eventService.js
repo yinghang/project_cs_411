@@ -7,10 +7,9 @@ angular.module('eventService', [])
 
 	// get all events for a location
 	eventFactory.get = function(location) {
-		return $http.post('/api/eventbrite', location);
+		return $http.post('/api/eventbritesearch/', {location: location});
 	};
 
 	// return our entire userFactory object
 	return eventFactory;
-
 });

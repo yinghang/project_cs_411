@@ -3,3 +3,40 @@
 <h1>
 		Events 
 </h1>
+
+<form class="form-horizontal" ng-submit="event.search()">
+<div class="form-group">
+		<label class="col-sm-2 control-label">Location</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="event.location">
+		</div>
+</div>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-6">
+		<button type="submit" class="btn btn-success btn-lg btn-block">Search</button>
+	</div>
+</div>
+
+
+<div class="jumbotron text-center" ng-show="event.processing">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<p>Loading Events...</p>
+</div>
+
+<table class="table table-bordered table-striped" ng-show="event.events">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Location</th>
+			<th>Start</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="e in event.events">
+			<td>{{ e.name }}</td>
+			<td>{{ e.location }}</td>
+			<td>{{ e.start }}</td>
+		</tr>
+	</tbody>
+</table>
