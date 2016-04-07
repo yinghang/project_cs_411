@@ -11,8 +11,11 @@ Nadav Hazan, Christine Low, Ying Hang Eng, Max Bazik
 SEQUENCE DIAGRAMS: check out word file called  S Diagram - Project 5 
 
 Our commented JSON schema: 
+
 var mongoose     = require('../mongoose');
+
 var Schema       = mongoose.Schema;
+
 // events schema 
 var EventSchema   = new Schema({
 	
