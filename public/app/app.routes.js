@@ -15,6 +15,13 @@ angular.module('app.routes', ['ngRoute'])
    			controller  : 'mainController',
     			controllerAs: 'login'
 		})
+
+		// form to sign up
+		.when('/signup', {
+			templateUrl: 'app/views/pages/signup.html',
+			controller: 'userCreateController',
+			controllerAs: 'login'
+		})
 		
 		// show all users
 		.when('/users', {

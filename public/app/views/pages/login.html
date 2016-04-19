@@ -8,7 +8,7 @@
 	</div> -->
 
 	<div class="jumbotron">
-		<h1>Login</h1>		
+		<h1>Login</h1><br>		
 
 		<form ng-submit="login.doLogin()">
 			
@@ -29,6 +29,8 @@
 			<button type="submit" class="btn btn-block btn-primary">
 				<span ng-if="!login.processing">Login</span>
 				<span ng-if="login.processing" class="spinner"><span class="glyphicon glyphicon-repeat"></span></span>
+			</button>
+			<button type="button" class="btn btn-block btn-primary" onclick="location.href='signup'"> Sign Up
 			</button>
 
 		</form>
