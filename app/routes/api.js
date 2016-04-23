@@ -191,37 +191,6 @@ module.exports = function(app, express) {
 	    res.send(req.decoded);
     });
 
-    // eventbrite GET endpoint to get events - ** FOR TESTING PURPOSES ONLY ** - ** NOT INTENDED FOR DEPLOYMENT USE **
-    /*
-    apiRouter.get('/eventbrite', function(req, res, next){
-        request = require('request');
-
-        var query = {
-            'location.address': 'Boston',
-            'sort_by':'best',
-            'token': config.eventbrite_key
-        };
-
-        request.get({ url: 'https://www.eventbriteapi.com/v3/events/search', qs: query }, function(err, request, body) {
-            
-            if (request.statusCode === 403) {
-                return next(new Error('BAD API CALL'));
-            }
-
-            var obj = JSON.parse(body);
-
-            res.send(obj);
-
-            //res.render('/eventbrite', {
-            //    my_title: 'Event Bright API',
-            //    events: ret.events
-            //});
-
-        });
-    });
-    */
-
-
     //-------------------------------------------------------------------------------
     // eventbrite POST endpoint to search events and get them if unavailable in mongo
     // ------------------------------------------------------------------------------
@@ -294,83 +263,5 @@ module.exports = function(app, express) {
     	})
 
     });
-
-/*
-    //-----------------------------------------------------------------------
-    // eventbrite POST endpoint to get events
-    // ----------------------------------------------------------------------
-    apiRouter.post('/eventbrite', function(req, res) {
-    	// req.assert('name', 'Name cannot be blank').notEmpty();
-
-    	// var errors = req.validationErrors();
-
-    	// if (errors) {
-    	//	req.flash('errors', errors);
-    	//	res.render('account/signup', {
-    	//		title: 'Create Account'
-    	//	});
-    	//	return res;
-    	//}
-
-    	var location = req.body.location;
-
-    	var query = {
-    		'location.address': location,
-    		'sort_by':'best',
-    		'token': config.eventbrite_key,
-    		'popular': true
-    	};
-
-    	request.get({ url: 'https://www.eventbriteapi.com/v3/events/search', qs: query }, function(err, request, body) {
-    		
-    		if (request.statusCode === 403) {
-    			return next(new Error('BAD API CALL'));
-    		}
-
-    		var obj = JSON.parse(body);
-
-    		// Top 10 events only for now;
-
-    		for (i = 0; i < 10; i++) { 
-
-    			var name_e = obj.events[i].name.text;
-    			var location_e = req.body.location;
-    			var id_e = obj.events[i].id;
-    			var start_e = obj.events[i].start.local;
-
-    			var event = new Event();		// create a new instance of the Event model
-    			event.name = name_e;  
-    			event.location = location_e;  
-    			event.id = id_e; 
-    			event.start = start_e;
-
-    			event.save(function(err) {
-    			
-    				if (err) {
-					// duplicate entry
-					if (err.code == 11000) 
-						return res.json({ success: false, message: 'An event with that id already exists. '});
-					else 
-						return res.send(err);
-					}	
-				});	
-    		};
-    		// return a message
-			res.json({ message: 'Events saved!' });
-    	})
-    });
-    */
-
-
-		// get all the users (accessed at GET http://localhost:8080/api/users)
-		//.get(function(req, res) {
-		//	User.find(function(err, users) {
-		//		if (err) res.send(err);
-
-				// return the users
-		//		res.json(users);
-		//	});
-		//});
-
 	return apiRouter;
 };
