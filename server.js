@@ -9,6 +9,8 @@ var morgan     = require('morgan'); 		// used to see requests
 var mongoose   = require('./app/mongoose');
 var config 	   = require('./config');
 var path 	   = require('path');
+var passport         = require( 'passport' );
+var GoogleStrategy   = require( 'passport-google-oauth2' ).Strategy;
 
 // APP CONFIGURATION ==================
 // ====================================
@@ -37,13 +39,53 @@ app.use(express.static(__dirname + '/public'));
 // ====================================
 
 // API ROUTES ------------------------
+
+//-------------------------------------------------------------------------------
+//  Ask passport to get the end user's calender information
+//-------------------------------------------------------------------------------
+var GOOGLE_CLIENT_ID      = "926065482898-jd0js7uv8id54fgsro4qht1os8udbjra.apps.googleusercontent.com"
+	, GOOGLE_CLIENT_SECRET  = "-jflG2_7rG27B-1dAHT4W2Ul"
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+	done(null, obj);
+});
+passport.use(new GoogleStrategy({
+		clientID:     GOOGLE_CLIENT_ID,
+		clientSecret: GOOGLE_CLIENT_SECRET,
+		callbackURL: "/auth/google/callback",
+		passReqToCallback   : true
+	},
+	function(request, accessToken, refreshToken, profile, done) {
+		process.nextTick(function () {
+			return done(null, profile);
+		});
+	}
+));
+app.use( passport.initialize());
+app.use( passport.session());
+
+app.post('/auth/google', passport.authenticate('google', { scope: [
+	'https://www.googleapis.com/auth/plus.login',
+	'https://www.googleapis.com/auth/calendar']
+
+}));
+app.get( '/auth/google/callback',
+	passport.authenticate( 'google', {
+		successRedirect: '/users/events',
+		failureRedirect: '/users/events'
+	})
+);
+
 var apiRoutes = require('./app/routes/api')(app, express);
 app.use('/api', apiRoutes);
 
 // EVENTBRITE  ROUTES (Not needed I think) ------------------------
 // app.get('/api/eventbrite', apiController.getEventBright);
 // app.post('/api/eventbrite', apiController.postEventBright);
-
+/*
+*/
 // MAIN CATCHALL ROUTE --------------- 
 // SEND USERS TO FRONTEND ------------
 // has to be registered after API ROUTES
