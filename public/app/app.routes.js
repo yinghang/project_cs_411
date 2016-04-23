@@ -22,6 +22,13 @@ angular.module('app.routes', ['ngRoute'])
 			controller: 'userCreateController',
 			controllerAs: 'login'
 		})
+
+		// user preferences page
+		.when('/preferences', {
+			templateUrl: 'app/views/pages/preferences.html',
+			controller: 'userCreateController',
+			controllerAs: 'preferences'
+		})
 		
 		// show all users
 		.when('/users', {

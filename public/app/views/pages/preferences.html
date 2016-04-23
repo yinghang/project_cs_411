@@ -1,0 +1,39 @@
+<div class="page-header">
+	<center><h3>User Preferences</h3></center>
+</div>
+
+<div class="row col-md-6 col-md-offset-3">
+
+	<form class="form-horizontal" ng-submit="userFactory.saveUser()">
+
+		<center><h4>Hello {{main.user.name}} &emsp; <button type="button" class="btn btn-primary" onclick="location.href='preferences'" style="width:200px"> Link Google Account</button></h4><br></center>
+
+		<div class="form-group">
+			<p><b>Current Email: {{main.user.password}}</b></p>
+			<label class="col-sm-3 control-label">Change email:</label></font>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" ng-model="user.userData.email">
+			</div>
+		</div><br>
+
+		<div class="form-group">
+			<p><b>Current Password: ******</b></p>
+			<label class="col-sm-3 control-label">Change Password:</label>
+			<div class="col-sm-6">
+				<input type="password" class="form-control" ng-model="user.userData.password">
+			</div>
+		</div><br>
+		
+		<div class="form-group">
+			<p><b>Current ZipCode: {{main.user.name}}</b></p>
+			<label class="col-sm-3 control-label">Change Zipcode</label></font>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" ng-model="user.userData.zipcode">
+			</div>
+		</div><br>
+
+		<br><center><input type="submit" class="btn btn-block btn-primary" value="Save Preferences" style="width:150px"></center>
+
+	</form><br><br>
+
+</div>
