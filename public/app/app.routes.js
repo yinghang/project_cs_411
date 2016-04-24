@@ -20,7 +20,7 @@ angular.module('app.routes', ['ngRoute'])
 		.when('/signup', {
 			templateUrl: 'app/views/pages/signup.html',
 			controller: 'userCreateController',
-			controllerAs: 'login'
+			controllerAs: 'user'
 		})
 
 		// user preferences page

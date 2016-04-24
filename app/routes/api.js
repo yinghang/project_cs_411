@@ -86,10 +86,21 @@ module.exports = function(app, express) {
 
 	    // if there is no token
 	    // return an HTTP response of 403 (access forbidden) and an error message
-   	 	return res.status(403).send({ 
-   	 		success: false, 
-   	 		message: 'No token provided.' 
-   	 	});
+
+	    // Fucking stupid ass workaround
+	    jwt.verify(token, superSecret, function(err, decoded) {      
+	      if (err)
+	        req.decoded = decoded;      
+	      else
+	        // if everything is good, save to request for use in other routes
+	        req.decoded = decoded;    
+	    });
+
+	    // Temp whiteout
+   	 	//return res.status(403).send({ 
+   	 	//	success: false, 
+   	 	//	message: 'No token provided.' 
+   	 	//});
 	    
 	  }
 

@@ -8,6 +8,7 @@
     "jsonwebtoken": "^1.2.0",
     "mongoose": "~3.8.19",
     "morgan": "~1.5.0",
+    "nodemon": "^1.9.1",
     "passport": "^0.3.2",
     "passport-google-oauth2": "^0.1.6",
     "request": "^2.69.0"

@@ -1,59 +1,43 @@
 <div class="page-header">
-	<center><h1>Sign Up</h1></center>
+	<h1>Sign Up</h1>
 </div>
 
-<div class="row col-md-6 col-md-offset-3">
-
-	<form class="form-horizontal" ng-submit="userFactory.create()">
-		
-		<div class="form-group">
-			<label class="col-sm-2 control-label">Name</label><font color="red">*</font>
-			<div class="col-sm-6">
-				<input type="text" class="form-control" ng-model="user.userData.name" required>
-			</div>
+<form class="form-horizontal" ng-submit="user.saveUser()">
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Name</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="user.userData.name">
 		</div>
+	</div>
 
-		<div class="form-group">
-			<label class="col-sm-2 control-label">Username</label><font color="red">*</font>
-			<div class="col-sm-6">
-				<input type="text" class="form-control" ng-model="user.userData.username" required>
-			</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Username</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" ng-model="user.userData.username">
 		</div>
+	</div>
 
-		<div class="form-group">
-			<label class="col-sm-2 control-label">Email</label><font color="red">*</font>
-			<div class="col-sm-6">.
-				<input type="text" class="form-control" ng-model="user.userData.email" required>
-			</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Password</label>
+		<div class="col-sm-6">
+			<input type="password" class="form-control" ng-model="user.userData.password">
 		</div>
+	</div>
+	
+	<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-6">
+		<button type="submit" class="btn btn-success btn-lg btn-block">Create User</button>
+	</div>
+	</div>
 
-		<div class="form-group">
-			<label class="col-sm-2 control-label">Password</label><font color="red">*</font>
-			<div class="col-sm-6">
-				<input type="password" class="form-control" ng-model="user.userData.password" required>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="col-sm-2 control-label">Zipcode</label><font color="red">*</font>
-			<div class="col-sm-6">
-				<input type="text" class="form-control" ng-model="user.userData.zipcode" required>
-			</div>
-		</div>
-		
-		<br><font color="red">* required field</font> <br><br>
-
-		<button type="submit" class="btn btn-block btn-primary" ng-click="location.href='/'">Submit</button>
-
-	</form>
-
-</div>
+</form>
 
 <div class="row show-hide-message" ng-show="user.message">
 	<div class="col-sm-6 col-sm-offset-2">
 		
 		<div class="alert alert-info">
-			User Created!
+			{{ user.message }}
 		</div>
 
 	</div>
