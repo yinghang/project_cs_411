@@ -29,7 +29,7 @@ angular.module('app.routes', ['ngRoute'])
 			controller: 'userEditController',
 			controllerAs: 'user'
 		})
-		
+
 		// show all users
 		.when('/users', {
 			templateUrl: 'app/views/pages/users/all.html',
@@ -51,17 +51,20 @@ angular.module('app.routes', ['ngRoute'])
 			controllerAs: 'event'
 		})
 
-
-		// form to create a new user
-		// same view as edit page
 		.when('/users/create', {
 			templateUrl: 'app/views/pages/users/single.html',
 			controller: 'userCreateController',
 			controllerAs: 'user'
 		})
 
+		.when('/users/edit', {
+			templateUrl: 'app/views/pages/users/single.html',
+			controller: 'userEditController',
+			controllerAs: 'user'
+		})
+
 		// page to edit a user
-		.when('/users/:user_id', {
+		.when('/users/alt/:user_id', {
 			templateUrl: 'app/views/pages/users/single.html',
 			controller: 'userEditController',
 			controllerAs: 'user'

@@ -4,9 +4,13 @@
 
 <div class="row col-md-6 col-md-offset-3">
 
-	<form class="form-horizontal" ng-submit="user.saveUser()">
+		<center><h4>
+			<form action="/auth/google/req" method="post">
+				Hello {{main.user.name}} &emsp; <button type="submit" class="btn btn-primary" style="width:200px" /> Link Google Account </button>
+			</form>
+		</h4><br></center>
 
-		<center><h4>Hello {{main.user.name}} &emsp; <button type="button" class="btn btn-primary" onclick="location.href='preferences'" style="width:200px"> Link Google Account</button></h4><br></center>
+		<form class="form-horizontal" ng-submit="userFactory.saveUser()">
 
 		<div class="form-group">
 			<p><b>Name: </b>{{main.user.name}}</p>

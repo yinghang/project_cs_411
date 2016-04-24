@@ -60,7 +60,6 @@ angular.module('userCtrl', ['userService'])
 				vm.userData = {};
 				vm.message = data.message;
 			});
-			
 	};	
 
 })

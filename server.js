@@ -11,6 +11,7 @@ var config 	   = require('./config');
 var path 	   = require('path');
 var passport         = require( 'passport' );
 var GoogleStrategy   = require( 'passport-google-oauth2' ).Strategy;
+var User        = require('./app/models/user');
 
 // APP CONFIGURATION ==================
 // ====================================
@@ -64,18 +65,19 @@ passport.use(new GoogleStrategy({
 	}
 ));
 app.use( passport.initialize());
-app.use( passport.session());
 
-app.post('/auth/google', passport.authenticate('google', { scope: [
+app.post('/auth/google/req', passport.authenticate('google', {session: false, scope: [
 	'https://www.googleapis.com/auth/plus.login',
 	'https://www.googleapis.com/auth/calendar']
-
 }));
-app.get( '/auth/google/callback',
-	passport.authenticate( 'google', {
-		successRedirect: '/users/events',
-		failureRedirect: '/users/events'
-	})
+
+app.get('/auth/google/callback',
+	passport.authenticate('google', { session: false, failureRedirect: "/preferences" }),
+	function(req, res) {
+		console.log("aouth token is:", req.query.code, "need to save this with user information")
+		res.
+		res.redirect("/preferences?code="+req.query.code);
+	}
 );
 
 var apiRoutes = require('./app/routes/api')(app, express);

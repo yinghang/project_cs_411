@@ -107,7 +107,6 @@ module.exports = function(app, express) {
 	  next(); // make sure we go to the next routes and don't stop here
 	});
 
-	// test route to make sure everything is working 
 	// accessed at GET http://localhost:8080/api
 	apiRouter.get('/', function(req, res) {
 		res.json({ message: 'hooray! welcome to our api!' });	
@@ -149,6 +148,7 @@ module.exports = function(app, express) {
 				res.json(users);
 			});
 		});
+
 
 	// on routes that end in /users/:user_id
 	// ----------------------------------------------------
@@ -201,6 +201,7 @@ module.exports = function(app, express) {
     apiRouter.get('/me', function(req, res) {
 	    res.send(req.decoded);
     });
+
 
     //-------------------------------------------------------------------------------
     // eventbrite POST endpoint to search events and get them if unavailable in mongo
