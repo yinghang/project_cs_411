@@ -26,8 +26,8 @@ angular.module('app.routes', ['ngRoute'])
 		// user preferences page
 		.when('/preferences', {
 			templateUrl: 'app/views/pages/preferences.html',
-			controller: 'userCreateController',
-			controllerAs: 'preferences'
+			controller: 'userEditController',
+			controllerAs: 'user'
 		})
 		
 		// show all users

@@ -4,20 +4,28 @@
 
 <div class="row col-md-6 col-md-offset-3">
 
-	<form class="form-horizontal" ng-submit="userFactory.saveUser()">
+	<form class="form-horizontal" ng-submit="user.saveUser()">
 
 		<center><h4>Hello {{main.user.name}} &emsp; <button type="button" class="btn btn-primary" onclick="location.href='preferences'" style="width:200px"> Link Google Account</button></h4><br></center>
 
 		<div class="form-group">
-			<p><b>Current Email: {{main.user.password}}</b></p>
-			<label class="col-sm-3 control-label">Change email:</label></font>
+			<p><b>Name: </b>{{main.user.name}}</p>
+			<label class="col-sm-3 control-label">Change Name:</label></font>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" ng-model="user.userData.name">
+			</div>
+		</div><br>
+
+		<div class="form-group">
+			<p><b>Current Email: </b>{{main.user.id}}</p>
+			<label class="col-sm-3 control-label">Change Email:</label></font>
 			<div class="col-sm-6">
 				<input type="text" class="form-control" ng-model="user.userData.email">
 			</div>
 		</div><br>
 
 		<div class="form-group">
-			<p><b>Current Password: ******</b></p>
+			<p><b>Current Password: </b>******</p>
 			<label class="col-sm-3 control-label">Change Password:</label>
 			<div class="col-sm-6">
 				<input type="password" class="form-control" ng-model="user.userData.password">
@@ -25,7 +33,7 @@
 		</div><br>
 		
 		<div class="form-group">
-			<p><b>Current ZipCode: {{main.user.name}}</b></p>
+			<p><b>Current ZipCode: </b>{{main.user.zipcode}}</p>
 			<label class="col-sm-3 control-label">Change Zipcode</label></font>
 			<div class="col-sm-6">
 				<input type="text" class="form-control" ng-model="user.userData.zipcode">
