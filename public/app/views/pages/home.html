@@ -1,5 +1,6 @@
+<div class="page-header">
 <div class="jumbotron text-center">
-	<h1>Event Search</h1>
+	<h1>Time Slot</h1>
 
 	<div ng-if="!main.loggedIn">
 		<p>Login into the admin area.</p>
@@ -8,8 +9,9 @@
 	</div>
 
 	<div ng-if="main.loggedIn">
-		<p>{{ main.user.name }}, you're logged in.</p>
+		<p>Welcome {{ main.user.name }}</p>
 		<a href="/users" class="btn btn-primary">View Users</a>  or 
-		<a href="/users/events" class="btn btn-primary">View Events</a>
+		<a href="/users/events" class="btn btn-primary">Search Events</a>
 	</div>
+
 </div>

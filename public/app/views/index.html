@@ -41,7 +41,7 @@
 	<!--<div class="navbar navbar-inverse" <ng-if="main.loggedIn">-->
 	<div class="container">
 		<div class="navbar-header">
-			<a href="/" class="navbar-brand"><span class="glyphicon glyphicon-globe text-muted"></span> Event Search</a>
+			<a href="/" class="navbar-brand"><span class="glyphicon glyphicon-calendar"></span> Time Slot</a>
 		</div>	
 		<ul class="nav navbar-nav navbar-right">
 			<li ng-if="!main.loggedIn"><a href="/login">Login</a></li>
@@ -59,6 +59,13 @@
 	<!-- ANGULAR VIEWS -->
 	<div ng-view></div>
 </main>
+
+<footer>
+	<div class="container"><br><br>
+		<hr>
+		&copy; Time Slot &emsp;|&emsp; Maxim Bazik, Ying Hang Eng, Nadav Hazan, Christine Low
+	</div>
+</footer>
 
 </body>
 </html>

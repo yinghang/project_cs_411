@@ -1,11 +1,16 @@
 main 					{
-	padding-top:30px;	
+	padding-top:10px;	
 }
 
 /* HEADER 
 ===================== */
 header .navbar 		{ 
 	border-radius:0;
+}
+
+footer {
+    position:fixed;
+    bottom:0;
 }
 
 /* NGANIMATE
