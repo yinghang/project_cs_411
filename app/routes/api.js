@@ -4,6 +4,8 @@ var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
 var mongodb    = require('mongodb').MongoClient;
 var request    = require('request');
+var passport   = require('passport')
+
 
 // super secret for creating tokens
 var superSecret = config.secret;
@@ -114,6 +116,7 @@ module.exports = function(app, express) {
 		res.json({ message: 'hooray! welcome to our api!' });	
 	});
 
+
 	// on routes that end in /users
 	// ----------------------------------------------------
 	apiRouter.route('/users')
@@ -214,6 +217,18 @@ module.exports = function(app, express) {
 	    //res.send(req.decoded.name);
     });
 
+	apiRouter.get('/savetoken', function(req, res) {
+
+
+	});
+
+	apiRouter.get('/auth/google/callback',
+		passport.authenticate('google', { session: false, failureRedirect: "/preferences" }),
+		function(req, res) {
+			console.log("aouth token is:", req.query.code, "need to save this with user information")
+			res.redirect("/api/savetoken?oauth="+req.query.code);
+		}
+	);
 
     //-------------------------------------------------------------------------------
     // eventbrite POST endpoint to search events and get them if unavailable in mongo

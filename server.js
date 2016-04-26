@@ -11,7 +11,8 @@ var config 	   = require('./config');
 var path 	   = require('path');
 var passport         = require( 'passport' );
 var GoogleStrategy   = require( 'passport-google-oauth2' ).Strategy;
-var User        = require('./app/models/user');
+var User        	 = require('./app/models/user');
+var request    = require('request');
 
 // APP CONFIGURATION ==================
 // ====================================
@@ -40,6 +41,8 @@ app.use(express.static(__dirname + '/public'));
 // ====================================
 
 // API ROUTES ------------------------
+var apiRoutes = require('./app/routes/api')(app, express);
+app.use('/api', apiRoutes);
 
 //-------------------------------------------------------------------------------
 //  Ask passport to get the end user's calender information
@@ -55,7 +58,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
 		clientID:     GOOGLE_CLIENT_ID,
 		clientSecret: GOOGLE_CLIENT_SECRET,
-		callbackURL: "/auth/google/callback",
+		callbackURL: "/api/auth/google/callback",
 		passReqToCallback   : true
 	},
 	function(request, accessToken, refreshToken, profile, done) {
@@ -70,18 +73,6 @@ app.post('/auth/google/req', passport.authenticate('google', {session: false, sc
 	'https://www.googleapis.com/auth/plus.login',
 	'https://www.googleapis.com/auth/calendar']
 }));
-
-app.get('/auth/google/callback',
-	passport.authenticate('google', { session: false, failureRedirect: "/preferences" }),
-	function(req, res) {
-		console.log("aouth token is:", req.query.code, "need to save this with user information")
-		res.
-		res.redirect("/preferences?code="+req.query.code);
-	}
-);
-
-var apiRoutes = require('./app/routes/api')(app, express);
-app.use('/api', apiRoutes);
 
 // EVENTBRITE  ROUTES (Not needed I think) ------------------------
 // app.get('/api/eventbrite', apiController.getEventBright);
