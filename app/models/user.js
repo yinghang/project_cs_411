@@ -7,7 +7,8 @@ var UserSchema   = new Schema({
 	name: String,
 	username: { type: String, required: true, index: { unique: true }},
 	password: { type: String, required: true, select: false },
-	//email: { type: String, required: false, index: { unique: true }},
+	email: { type: String, required: false, index: { unique: true }},
+	zipcode: { type: String, required: true, index: { unique: false} }
 	//oauth: { type: String, required: false}
 });
 

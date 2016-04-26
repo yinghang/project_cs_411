@@ -44,10 +44,12 @@ module.exports = function(app, express) {
 	        // create a token
 	        var token = jwt.sign({
 	        	name: user.name,
-	        	username: user.username
+	        	username: user.username,
+	        	email: user.email,
+	        	zipcode: user.zipcode
 	        }, superSecret, {
 	          expiresInMinutes: 1440 // expires in 24 hours
-	        });
+	        })
 
 	        // return the information including token as JSON
 	        res.json({
@@ -123,6 +125,8 @@ module.exports = function(app, express) {
 			user.name = req.body.name;  // set the users name (comes from the request)
 			user.username = req.body.username;  // set the users username (comes from the request)
 			user.password = req.body.password;  // set the users password (comes from the request)
+			user.email = req.body.email;		// set the users email
+			user.zipcode = req.body.zipcode;	// set the users zipcode
 
 			user.save(function(err) {
 				if (err) {
@@ -174,6 +178,8 @@ module.exports = function(app, express) {
 				if (req.body.name) user.name = req.body.name;
 				if (req.body.username) user.username = req.body.username;
 				if (req.body.password) user.password = req.body.password;
+				if (req.body.email) user.email = req.body.email;
+				if (req.body.zipcode) user.zipcode = req.body.zipcode;
 
 				// save the user
 				user.save(function(err) {
