@@ -28,5 +28,7 @@ var EventSchema   = new Schema({
 	start: String
 });
 
+It's also important to note that as our team continued to develop, our idea began to pivot as well. We talked to several students on campus and wanted to hear what they really wanted. Also, with the amount of time we had in the semester, and our team's eagerness to work together on the project, we really wanted to focus on the principle of your application. We wanted to make sure our application allows our users an easy login, an ability to search for events, and an ability to sync their calendars to better pick events that work best for them when they are free.
+
 
 
