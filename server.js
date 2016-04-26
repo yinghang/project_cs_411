@@ -58,7 +58,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
 		clientID:     GOOGLE_CLIENT_ID,
 		clientSecret: GOOGLE_CLIENT_SECRET,
-		callbackURL: "/api/auth/google/callback",
+		callbackURL: "/api/oauth",
 		passReqToCallback   : true
 	},
 	function(request, accessToken, refreshToken, profile, done) {
@@ -69,7 +69,7 @@ passport.use(new GoogleStrategy({
 ));
 app.use( passport.initialize());
 
-app.post('/auth/google/req', passport.authenticate('google', {session: false, scope: [
+app.post('/auth/google/req', passport.authenticate('google', {session: true, scope: [
 	'https://www.googleapis.com/auth/plus.login',
 	'https://www.googleapis.com/auth/calendar']
 }));

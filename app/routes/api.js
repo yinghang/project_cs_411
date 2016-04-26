@@ -4,7 +4,9 @@ var jwt        = require('jsonwebtoken');
 var config     = require('../../config');
 var mongodb    = require('mongodb').MongoClient;
 var request    = require('request');
-var passport   = require('passport')
+var google     = require('googleapis');
+var googleAuth = require('google-auth-library');
+var fs         = require('fs');
 
 
 // super secret for creating tokens
@@ -207,22 +209,51 @@ module.exports = function(app, express) {
 		});
 
     // api endpoint to get user information
-    apiRouter.get('/me', function(req, res) {
-    	User.findOne(req.decoded.name, function(err, user) {
+    apiRouter.get('/oauth', function(req, res) {
+		// check header or url parameters or post parameters for token
+		var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+		// decode token
+		if (token) {
+
+			// verifies secret and checks exp
+			jwt.verify(token, superSecret, function(err, decoded) {
+				if (err)
+					return res.json({ success: false, message: 'Failed to authenticate token.' });
+				else
+				// if everything is good, save to request for use in other routes
+					stupid_var = decoded.name;
+			});
+
+		}
+
+
+		User.findOne(stupid_var, function(err, user) {
+			if (err) res.send(err);
+
+			// add oauth into database
+			if (req.body.code) user.oauth = req.body.code;
+			user.save(function(err) {
 				if (err) res.send(err);
 
-				// return that user
-				res.json(user);
+				// return a message
+				res.json({ message: 'User updated!' });
 			});
-	    //res.send(req.decoded.name);
+		});
     });
 
-    apiRouter.post('/me', function(req, res) {
+	apiRouter.get('/me', function(req, res) {
+		User.findOne(req.decoded.name, function(err, user) {
+		if (err) res.send(err);
+		res.json(user);
+		});
+	});
+    /*apiRouter.post('/me', function(req, res) {
     	User.findOne(req.decoded.name, function(err, user) {
 				if (err) res.send(err);
 
 				// add oauth into database
-				if (req.body.oauth) user.oauth = req.body.oauth;
+				if (req.body.code) user.oauth = req.body.code;
 				user.save(function(err) {
 					if (err) res.send(err);
 
@@ -230,7 +261,7 @@ module.exports = function(app, express) {
 					res.json({ message: 'User updated!' });
 				});
 			});
-    });
+    });*/
 
 	//apiRouter.get('/auth/google/callback',
 	//	passport.authenticate('google', { session: false, failureRedirect: "/preferences" }),
@@ -245,6 +276,50 @@ module.exports = function(app, express) {
     // ------------------------------------------------------------------------------
 
     apiRouter.post('/eventbritesearch', function(req,res){
+		var auth        = new googleAuth();
+		// API and callback should be in config file
+		var oauth2Client = new auth.OAuth2("926065482898-jd0js7uv8id54fgsro4qht1os8udbjra.apps.googleusercontent.com", "-jflG2_7rG27B-1dAHT4W2Ul", "http://localhost:8080/auth/google/callback");
+		// hard-coded error reader
+		var token = fs.readFileSync("./cred.json")
+		oauth2Client.credentials = JSON.parse(token)
+
+		var events;
+
+		var calendar = google.calendar('v3');
+		calendar.events.list({
+			auth: oauth2Client,
+			calendarId: 'primary',
+			timeMin: (new Date()).toISOString(),
+			maxResults: 30,
+			singleEvents: true,
+			orderBy: 'startTime'
+		}, function(err, response) {
+			if (err) {
+				console.log('The API returned an error: ' + err);
+				return;
+			}
+			events = response.items;
+			if (events.length == 0) {
+				console.log('No upcoming events found.');
+			} else {
+				console.log('Upcoming 10 events:');
+				for (var i = 0; i < events.length; i++) {
+					var event = events[i];
+					var start = event.start.dateTime || event.start.date;
+					var end = event.end.dateTime || event.end.date;
+					console.log("is strat before finish", new Date(start)< new Date(end))
+					console.log("orther way? ", new Date(start) > new Date(end));
+					console.log('%s to %s - %s', start, end, event.summary);
+				}
+			}
+		});
+
+
+
+
+
+
+
     	var location_temp = req.body.location;
 
     	// determines if location is stored in Mongo already
@@ -279,17 +354,30 @@ module.exports = function(app, express) {
     			var location_e = req.body.location;
     			var id_e = obj.events[i].id;
     			var start_e = obj.events[i].start.local;
+				var end_e = obj.events[i].end.local;
+				var conflict_e = "No";
+				for (var j = 0; j < events.length; j++) {
+					var eventBright = events[j];
+					var start = eventBright.start.dateTime || eventBright.start.date;
+					var end = eventBright.end.dateTime || eventBright.end.date;
+					if (!(new Date(start_e) > new Date(end) || new Date(end_e) < new Date(start))) {
+						conflict_e = "Yes";
+						break;
+					}
+				}
 
     			var event = new Event();		// create a new instance of the Event model
     			event.name = name_e;  
     			event.location = location_e;  
     			event.id = id_e; 
     			event.start = start_e;
+				event.end = end_e;
+				event.conflict = conflict_e;
 
     			event.save(function(err) {
-    			
     				if (err) {
 					// duplicate entry
+					console.log("error here")
 					if (err.code == 11000) 
 						return res.json({ success: false, message: 'An event with that id already exists. '});
 					else 
@@ -302,8 +390,7 @@ module.exports = function(app, express) {
     	})
 
     		} else if (event){
-
-    			Event.find({location: location_temp}).select('name location id start').exec(function(err, event){
+    			Event.find({location: location_temp}).select('name location id start end conflict').exec(function(err, event){
     			if (err) throw err;
     			res.json(event);
 

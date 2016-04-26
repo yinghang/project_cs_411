@@ -3,13 +3,6 @@
 <h1>
 		Events 
 </h1>
-
-<h2>
-	<form action="/auth/google" method="post">
-		<button type="submit" class="btn btn-default btn-lg" /> Connect to Google </button>
-	</form>
-</h2>
-
 <form class="form-horizontal" ng-submit="event.search()">
 <div class="form-group">
 		<label class="col-sm-2 control-label">Location</label>
@@ -36,6 +29,8 @@
 			<th>Name</th>
 			<th>Location</th>
 			<th>Start</th>
+			<th>End</th>
+			<th>Confict</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -43,6 +38,8 @@
 			<td>{{ e.name }}</td>
 			<td>{{ e.location }}</td>
 			<td>{{ e.start }}</td>
+			<td>{{ e.end   }}</td>
+			<td>{{ e.conflict}}</td>
 		</tr>
 	</tbody>
 </table>
