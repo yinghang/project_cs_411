@@ -10,10 +10,9 @@
 			</form>
 		</h4><br></center>
 
-		<form class="form-horizontal" ng-submit="userFactory.saveUser()">
+		<form class="form-horizontal" ng-submit="user.saveUser()">
 
 		<div class="form-group">
-			<p><b>Name: </b>{{main.user.name}}</p>
 			<label class="col-sm-3 control-label">Change Name:</label></font>
 			<div class="col-sm-6">
 				<input type="text" class="form-control" ng-model="user.userData.name">
@@ -21,7 +20,6 @@
 		</div><br>
 
 		<div class="form-group">
-			<p><b>Current Email: </b>{{main.user.id}}</p>
 			<label class="col-sm-3 control-label">Change Email:</label></font>
 			<div class="col-sm-6">
 				<input type="text" class="form-control" ng-model="user.userData.email">
@@ -29,7 +27,6 @@
 		</div><br>
 
 		<div class="form-group">
-			<p><b>Current Password: </b>******</p>
 			<label class="col-sm-3 control-label">Change Password:</label>
 			<div class="col-sm-6">
 				<input type="password" class="form-control" ng-model="user.userData.password">
@@ -37,7 +34,6 @@
 		</div><br>
 		
 		<div class="form-group">
-			<p><b>Current ZipCode: </b>{{main.user.zipcode}}</p>
 			<label class="col-sm-3 control-label">Change Zipcode</label></font>
 			<div class="col-sm-6">
 				<input type="text" class="form-control" ng-model="user.userData.zipcode">

@@ -30,6 +30,12 @@ angular.module('app.routes', ['ngRoute'])
 			controllerAs: 'user'
 		})
 
+		.when('/preferences/:user_id', {
+			templateUrl: 'app/views/pages/preferences.html',
+			controller: 'userEditController',
+			controllerAs: 'user'
+		})
+
 		// show all users
 		.when('/users', {
 			templateUrl: 'app/views/pages/users/all.html',
@@ -64,7 +70,7 @@ angular.module('app.routes', ['ngRoute'])
 		})
 
 		// page to edit a user
-		.when('/users/alt/:user_id', {
+		.when('/users/:user_id', {
 			templateUrl: 'app/views/pages/users/single.html',
 			controller: 'userEditController',
 			controllerAs: 'user'
