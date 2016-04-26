@@ -35,7 +35,7 @@
 	</thead>
 	<tbody>
 		<tr ng-repeat="e in event.events">
-			<td>{{ e.name }}</td>
+			<td><a href ="http://www.eventbrite.com/e/{{e.id}}?aff=es2" target="_blank">{{ e.name }}</a></td>
 			<td>{{ e.location }}</td>
 			<td>{{ e.start }}</td>
 			<td>{{ e.end   }}</td>
