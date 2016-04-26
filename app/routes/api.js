@@ -217,18 +217,28 @@ module.exports = function(app, express) {
 	    //res.send(req.decoded.name);
     });
 
-	apiRouter.get('/savetoken', function(req, res) {
+    apiRouter.post('/me', function(req, res) {
+    	User.findOne(req.decoded.name, function(err, user) {
+				if (err) res.send(err);
 
+				// add oauth into database
+				if (req.body.oauth) user.oauth = req.body.oauth;
+				user.save(function(err) {
+					if (err) res.send(err);
 
-	});
+					// return a message
+					res.json({ message: 'User updated!' });
+				});
+			});
+    });
 
-	apiRouter.get('/auth/google/callback',
-		passport.authenticate('google', { session: false, failureRedirect: "/preferences" }),
-		function(req, res) {
-			console.log("aouth token is:", req.query.code, "need to save this with user information")
-			res.redirect("/api/savetoken?oauth="+req.query.code);
-		}
-	);
+	//apiRouter.get('/auth/google/callback',
+	//	passport.authenticate('google', { session: false, failureRedirect: "/preferences" }),
+	//	function(req, res) {
+	//		console.log("aouth token is:", req.query.code, "need to save this with user information")
+	//		res.redirect("/api/savetoken?oauth="+req.query.code);
+	//	}
+	//);
 
     //-------------------------------------------------------------------------------
     // eventbrite POST endpoint to search events and get them if unavailable in mongo
