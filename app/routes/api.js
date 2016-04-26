@@ -9,6 +9,7 @@ var googleAuth = require('google-auth-library');
 var fs         = require('fs');
 
 
+
 // super secret for creating tokens
 var superSecret = config.secret;
 
@@ -210,38 +211,9 @@ module.exports = function(app, express) {
 
     // api endpoint to get user information
     apiRouter.get('/oauth', function(req, res) {
-		// check header or url parameters or post parameters for token
-		var token = req.body.token || req.query.token || req.headers['x-access-token'];
-
-		// decode token
-		if (token) {
-
-			// verifies secret and checks exp
-			jwt.verify(token, superSecret, function(err, decoded) {
-				if (err)
-					return res.json({ success: false, message: 'Failed to authenticate token.' });
-				else
-				// if everything is good, save to request for use in other routes
-					stupid_var = decoded.name;
-			});
-
-		}
-
-
-		User.findOne(stupid_var, function(err, user) {
-			if (err) res.send(err);
-
-			// add oauth into database
-			if (req.body.code) user.oauth = req.body.code;
-			user.save(function(err) {
-				if (err) res.send(err);
-
-				// return a message
-				res.json({ message: 'User updated!' });
-			});
-		});
+		res.json({ code: req.query.code });
     });
-
+	
 	apiRouter.get('/me', function(req, res) {
 		User.findOne(req.decoded.name, function(err, user) {
 		if (err) res.send(err);
@@ -283,7 +255,7 @@ module.exports = function(app, express) {
 		var token = fs.readFileSync("./cred.json")
 		oauth2Client.credentials = JSON.parse(token)
 
-		var events;
+		var Bevents;
 
 		var calendar = google.calendar('v3');
 		calendar.events.list({
@@ -298,13 +270,13 @@ module.exports = function(app, express) {
 				console.log('The API returned an error: ' + err);
 				return;
 			}
-			events = response.items;
-			if (events.length == 0) {
+			Bevents = response.items;
+			if (Bevents.length == 0) {
 				console.log('No upcoming events found.');
 			} else {
 				console.log('Upcoming 10 events:');
-				for (var i = 0; i < events.length; i++) {
-					var event = events[i];
+				for (var i = 0; i < Bevents.length; i++) {
+					var event = Bevents[i];
 					var start = event.start.dateTime || event.start.date;
 					var end = event.end.dateTime || event.end.date;
 					console.log("is strat before finish", new Date(start)< new Date(end))
@@ -346,47 +318,57 @@ module.exports = function(app, express) {
 
     		var obj = JSON.parse(body);
 
-    		// Top 10 events only for now;
+			if (obj.events) {
 
-    		for (i = 0; i < 10; i++) { 
+				console.log(obj.events);
+				// Top 10 events only for now;
 
-    			var name_e = obj.events[i].name.text;
-    			var location_e = req.body.location;
-    			var id_e = obj.events[i].id;
-    			var start_e = obj.events[i].start.local;
-				var end_e = obj.events[i].end.local;
-				var conflict_e = "No";
-				for (var j = 0; j < events.length; j++) {
-					var eventBright = events[j];
-					var start = eventBright.start.dateTime || eventBright.start.date;
-					var end = eventBright.end.dateTime || eventBright.end.date;
-					if (!(new Date(start_e) > new Date(end) || new Date(end_e) < new Date(start))) {
-						conflict_e = "Yes";
-						break;
+				for (i = 0; i < Math.max(10, obj.events.length); i++) {
+
+					var name_e = obj.events[i].name.text;
+					var location_e = req.body.location;
+					var id_e = obj.events[i].id;
+					var start_e = obj.events[i].start.local;
+					var end_e = obj.events[i].end.local;
+					var conflict_e = "No";
+					if (Bevents) {
+						for (var j = 0; j < Bevents.length; j++) {
+							var eventBright = Bevents[j];
+							var start = eventBright.start.dateTime || eventBright.start.date;
+							var end = eventBright.end.dateTime || eventBright.end.date;
+							if (!(new Date(start_e) > new Date(end) || new Date(end_e) < new Date(start))) {
+								conflict_e = "Yes";
+								break;
+							}
+						}
 					}
-				}
 
-    			var event = new Event();		// create a new instance of the Event model
-    			event.name = name_e;  
-    			event.location = location_e;  
-    			event.id = id_e; 
-    			event.start = start_e;
-				event.end = end_e;
-				event.conflict = conflict_e;
+					var event = new Event();		// create a new instance of the Event model
+					event.name = name_e;
+					event.location = location_e;
+					event.id = id_e;
+					event.start = start_e;
+					event.end = end_e;
+					event.conflict = conflict_e;
 
-    			event.save(function(err) {
-    				if (err) {
-					// duplicate entry
-					console.log("error here")
-					if (err.code == 11000) 
-						return res.json({ success: false, message: 'An event with that id already exists. '});
-					else 
-						return res.send(err);
-					}	
-				});	
-    		};
+					event.save(function (err) {
+						if (err) {
+							// duplicate entry
+							console.log("error here")
+							if (err.code == 11000)
+								return res.json({success: false, message: 'An event with that id already exists. '});
+							else
+								return res.send(err);
+						}
+					});
+				};
+			};
     		// return a message
 			res.json({ message: 'Events saved!' });
+			//Event.find({location: location_temp}).select('name location id start end conflict').exec(function(err, event){
+			//	if (err) throw err;
+			//	res.json(event);
+			//})
     	})
 
     		} else if (event){
