@@ -33,4 +33,10 @@ It's also important to note that as our team continued to develop, our idea bega
 
 All of our team's documentation is included. The files are in the main repository, and many of the documentation have the word "documentation" or "assignment" or "screenshot" next to them. 
 
+Some of the main documentation files are: 
+Architecture : Prototype Documentation
+s Diagram - Project 5
+Team 9 Use Case
+Screenshot - Boston Search
+Assignment 6 Documentation
 
