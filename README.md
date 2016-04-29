@@ -43,5 +43,5 @@ Team 9 Use Case
 
 Screenshot - Boston Search
 
-Assignment 6 Documentation
+Assignment 6 Testing Documentation
 
