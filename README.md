@@ -46,7 +46,7 @@ Screenshot - Boston Search
 
 Assignment 6 Testing Documentation
 
-Plans for next veriosn - Gantt Chart Documentation
+Plans for next version - Gantt Chart Documentation
 
 Team Meeting Minutes
 
